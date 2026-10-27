@@ -1,0 +1,91 @@
+{
+  "id": "system-design",
+  "title": "System Design & Architecture",
+  "version": 1,
+  "assets": [],
+  "learningPaths": [
+    {
+      "id": "distributed-systems",
+      "title": "Foundations of Distributed Systems",
+      "description": "Nodes, latency, failure, and the fallacies you must unlearn.",
+      "icon": "ic_nodes",
+      "topics": [
+        {
+          "id": "dist-sys-01",
+          "title": "Nodes, Latency & Failure",
+          "file": "learn/01-nodes-and-latency.md",
+          "relatedQuizId": "quiz-dist-sys",
+          "relatedExtraIds": ["url-shortener"]
+        },
+        {
+          "id": "dist-sys-02",
+          "title": "Scalability Fundamentals",
+          "file": "learn/02-scalability-fundamentals.md",
+          "relatedQuizId": "quiz-dist-sys",
+          "relatedExtraIds": ["url-shortener", "chat-system"]
+        }
+      ]
+    },
+    {
+      "id": "scaling-load-balancing",
+      "title": "Scaling & Load Balancing",
+      "description": "Horizontal scale, balancers, and routing requests under pressure.",
+      "icon": "ic_scale",
+      "topics": [
+        {
+          "id": "dist-sys-02",
+          "title": "Scalability Fundamentals",
+          "file": "learn/02-scalability-fundamentals.md",
+          "relatedQuizId": "quiz-dist-sys",
+          "relatedExtraIds": ["url-shortener"]
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "id": "url-shortener",
+      "title": "Design a URL Shortener",
+      "summary": "Map billions of long URLs to short, unique keys — and redirect in milliseconds.",
+      "type": "USE_CASE",
+      "tags": ["Hashing", "Base62", "Caching"],
+      "tier": "FREE",
+      "unlockAfterPathId": null,
+      "externalUrl": null,
+      "file": "extra/url-shortener.md"
+    },
+    {
+      "id": "chat-system",
+      "title": "Design a Chat System",
+      "summary": "Deliver messages in real time with presence, ordering, and offline delivery.",
+      "type": "USE_CASE",
+      "tags": ["WebSockets", "Ordering", "Real-time"],
+      "tier": "CORE",
+      "unlockAfterPathId": "distributed-systems",
+      "externalUrl": null,
+      "file": "extra/chat-system.md"
+    },
+    {
+      "id": "aws-arch-blog",
+      "title": "AWS Architecture Blog",
+      "summary": "Official reference architectures, whitepapers, and real-world cloud engineering case studies.",
+      "type": "EXTERNAL_LINK",
+      "tags": ["Cloud", "Reference"],
+      "tier": "FREE",
+      "unlockAfterPathId": null,
+      "externalUrl": "https://aws.amazon.com/blogs/architecture/",
+      "file": null
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "quiz-dist-sys",
+      "title": "Distributed Systems & Scalability",
+      "relatedPathId": "distributed-systems",
+      "questionCount": 3,
+      "timeLimitMinutes": 4,
+      "passPercentage": 65,
+      "file": "quiz/dist-sys-quiz.md"
+    }
+  ]
+}

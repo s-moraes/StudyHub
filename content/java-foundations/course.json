@@ -1,0 +1,47 @@
+{
+  "id": "java-foundations",
+  "title": "Prep4Java: Foundations",
+  "version": 1,
+  "assets": [],
+  "learningPaths": [
+    {
+      "id": "java-basics-path",
+      "title": "Java Basics & Class Structure",
+      "description": "Packages, imports, class declarations, and the main() entry point.",
+      "icon": "ic_code",
+      "topics": [
+        {
+          "id": "java-class-structure",
+          "title": "Java Source File & Class Structure",
+          "file": "learn/01-java-class-structure.md",
+          "relatedQuizId": "java-basics",
+          "relatedExtraIds": ["integer-cache-curiosity"]
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "id": "integer-cache-curiosity",
+      "title": "Why 127 == 127 is true, but 128 == 128 is false",
+      "summary": "Explore the internal JVM IntegerCache mechanic and how autoboxing affects reference equality.",
+      "type": "CURIOSITY",
+      "tags": ["JVM", "Autoboxing", "Memory"],
+      "tier": "FREE",
+      "unlockAfterPathId": null,
+      "externalUrl": null,
+      "file": "extra/integer-cache-curiosity.md"
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "java-basics",
+      "title": "Java Basics",
+      "relatedPathId": "java-basics-path",
+      "questionCount": 4,
+      "timeLimitMinutes": 4,
+      "passPercentage": 65,
+      "file": "quiz/java-basics.md"
+    }
+  ]
+}

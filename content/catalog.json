@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "system-design",
+      "title": "System Design & Architecture",
+      "description": "Scalability, distributed systems, and real-world architectures.",
+      "version": 1,
+      "courseJsonPath": "content/system-design/course.json"
+    },
+    {
+      "id": "java-foundations",
+      "title": "Prep4Java: Foundations",
+      "description": "Core syntax, data types, operators, arrays, and certification prep.",
+      "version": 1,
+      "courseJsonPath": "content/java-foundations/course.json"
+    }
+  ]
+}
