@@ -1,57 +1,89 @@
 ## Q1
-Why do high-scale distributed systems monitor p95 and p99 latency percentiles instead of relying solely on the arithmetic mean (average)?
-
-### Option A
-Because p99 is mathematically faster to compute in SQL databases than `AVG()`.
-
-### Option B [CORRECT]
-Because averages hide high tail-latency spikes experienced by the slowest 1% to 5% of requests, which degrade fan-out architectures.
-
-### Option C
-Because network switches automatically drop packets that exceed the p50 latency threshold.
-
-### Option D
-Because horizontal scaling only improves p99 latency and never affects average latency.
-
-### Explanation
-Arithmetic averages mask outliers. If 99 requests take 10ms and 1 request takes 5,000ms, the average looks healthy (~60ms), but in a microservice architecture where a page aggregates 10 backend calls, the probability of hitting at least one p99 slow call becomes very high.
-
-===
-
-## Q2
-In a URL Shortener service, what is the primary behavioral difference between returning an `HTTP 301` vs. an `HTTP 302` status code?
-
-### Option A
-`301` encrypts the redirect URL using TLS, whereas `302` sends it in plain text.
-
-### Option B
-`301` supports Base62 keys, whereas `302` only supports numeric IDs.
-
-### Option C [CORRECT]
-`301` instructs browsers to cache the redirect permanently (bypassing your server on repeat visits), while `302` forces requests through your server for analytics tracking.
-
-### Option D
-`302` is only valid for POST requests, while `301` is used for GET requests.
-
-### Explanation
-`301 Moved Permanently` allows browsers to resolve subsequent visits directly from local cache, reducing server load. `302 Found` ensures every click hits the shortener service so click metrics can be recorded.
-
-===
-
-## Q3
-Which requirement is essential for an application service tier to scale horizontally behind a round-robin load balancer without sticky sessions?
+What is the primary difference between horizontal and vertical scaling?
 
 ### Option A [CORRECT]
-The application instances must be stateless, storing session or user state externally (e.g., Redis or signed tokens).
+Horizontal adds more machines; vertical adds more resources (CPU/RAM) to a single machine.
 
 ### Option B
-Each application instance must maintain a local `ConcurrentHashMap` of active user sessions in JVM heap memory.
+Horizontal increases database storage; vertical increases network bandwidth.
 
 ### Option C
-All instances must share the exact same physical CPU socket.
+Horizontal requires downtime; vertical does not require downtime.
 
 ### Option D
-The service must only communicate via synchronous HTTP/1.0 connections.
+There is no architectural difference between them.
 
 ### Explanation
-When instances are stateless, any server in the pool can handle any consecutive request from a user without losing session context.
+Horizontal scaling (scale-out) distributes workload across multiple nodes, while vertical scaling (scale-up) upgrades capacity of a single instance.
+===
+## Q2
+What is the role of a reverse proxy in web architecture?
+
+### Option A [CORRECT]
+Routes client requests to backend servers, providing caching, SSL termination, and load balancing.
+
+### Option B
+Generates cryptographically secure private keys for client browsers.
+
+### Option C
+Acts as a client-side database cache.
+
+### Option D
+Prevents all network partitions in a cluster.
+
+### Explanation
+A reverse proxy intercepts client requests before they hit internal services, facilitating load balancing, security, and edge caching.
+===
+## Q3
+Which hashing technique minimizes re-keying when nodes are added or removed from a cache cluster?
+
+### Option A [CORRECT]
+Consistent Hashing
+
+### Option B
+Modulus Hashing (hash(key) % N)
+
+### Option C
+Linear Probing
+
+### Option D
+SHA-256 Checksum
+
+### Explanation
+Consistent hashing maps both servers and keys to a ring, ensuring only k/N keys need to be remapped on average when a node joins or leaves.
+===
+## Q4
+In the CAP theorem, what does Partition Tolerance guarantee?
+
+### Option A [CORRECT]
+The system continues to operate despite an arbitrary number of messages being dropped or delayed by the network.
+
+### Option B
+All reads return the most recent write instantly across all nodes.
+
+### Option C
+Every non-failing node returns a successful response without guarantee of latest data.
+
+### Option D
+Transactions follow strict ACID serialization.
+
+### Explanation
+Partition tolerance means the system sustains network communication failures between nodes without collapsing.
+===
+## Q5
+Why are stateless services preferred for horizontal auto-scaling?
+
+### Option A [CORRECT]
+Any instance can handle any incoming request without needing shared memory or sticky sessions.
+
+### Option B
+Stateless services do not use any databases.
+
+### Option C
+They eliminate network latency entirely.
+
+### Option D
+They cannot crash or experience out-of-memory errors.
+
+### Explanation
+Stateless nodes hold no client session data, so traffic can be dynamically routed to any available instance.

@@ -1,19 +1,26 @@
 {
-  "version": 1,
+  "version": 2,
   "courses": [
     {
       "id": "system-design",
       "title": "System Design & Architecture",
-      "description": "Scalability, distributed systems, and real-world architectures.",
+      "description": "Distributed systems, scalability, load balancing, caching, and database architecture.",
       "version": 1,
       "courseJsonPath": "content/system-design/course.json"
     },
     {
       "id": "java-foundations",
       "title": "Prep4Java: Foundations",
-      "description": "Core syntax, data types, operators, arrays, and certification prep.",
+      "description": "Java language syntax, OOP constructs, collections, exceptions, and certification preparation.",
       "version": 1,
       "courseJsonPath": "content/java-foundations/course.json"
+    },
+    {
+      "id": "flyway-migrations",
+      "title": "Database Migrations with Flyway",
+      "description": "Schema evolution, versioned migrations, repeatable scripts, CI/CD integration, and zero-downtime practices.",
+      "version": 1,
+      "courseJsonPath": "content/flyway-migrations/course.json"
     }
   ]
 }

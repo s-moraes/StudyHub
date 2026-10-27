@@ -205,3 +205,67 @@ Second question prompt goes here...
 
 ### Explanation
 ...
+
+5. Step-by-Step Workflows for Adding New Content
+Workflow A: Adding a New Topic to an Existing Learning Path
+Create content/<course-id>/learn/<NN-topic-slug>.md following Section 4.1.
+
+Open content/<course-id>/course.json:
+
+Locate the target object in learningPaths[].
+
+Append the new topic entry to topics[] with a unique id, title, file, and optional relatedQuizId / relatedExtraIds.
+
+Increment "version" in course.json.
+
+Open content/catalog.json:
+
+Increment "version" for <course-id> to match course.json, and increment the root "version".
+
+Workflow B: Adding a New Extra Item (USE_CASE, CURIOSITY, HISTORY, EXTERNAL_LINK)
+If the item has an article body, create content/<course-id>/extra/<slug>.md following Section 4.1.
+
+Open content/<course-id>/course.json:
+
+Append a new entry to extras[] with a unique id, title, 1–2 sentence summary, valid type, up to 3 short tags, tier ("FREE" or "CORE"), unlockAfterPathId, externalUrl, and file.
+
+optionally link its id inside related learningPaths[].topics[].relatedExtraIds.
+
+Increment "version" in course.json and content/catalog.json.
+
+Workflow C: Adding or Expanding a Quiz
+Create or edit content/<course-id>/quiz/<quiz-slug>.md strictly following Section 4.2.
+
+Count the total number of ## Q<N> blocks in the file.
+
+Open content/<course-id>/course.json:
+
+Update or add the quiz entry in quizzes[], ensuring "questionCount" equals the exact number of questions in the .md file.
+
+Increment "version" in course.json and content/catalog.json.
+
+Workflow D: Creating a Brand-New Course (content/<new-course-id>/)
+Create directory tree: content/<new-course-id>/{assets,learn,extra,quiz}.
+
+Generate course.json with "version": 1 and at least 1 Learning Path, 1 Extra, and 1 Quiz.
+
+Generate all referenced .md files in learn/, extra/, and quiz/.
+
+Register the new course inside content/catalog.json and increment the catalog "version".
+
+6. Pre-Commit Compliance Checklist (Self-Verification)
+Before finalizing any file generation or modification, verify:
+
+[ ] All JSON files (catalog.json, course.json) are 100% valid JSON with no trailing commas or comments.
+
+[ ] Every "file" path in course.json exists on disk at content/<course-id>/<file>.
+
+[ ] Every local image ../assets/<img.webp> used in Markdown exists in assets/ and is listed in course.json -> assets[].
+
+[ ] No readingTimeMinutes property exists anywhere.
+
+[ ] Every quiz/*.md question has exactly 4 options (### Option A..D), exactly one [CORRECT] marker, an ### Explanation section, and \n===\n between questions.
+
+[ ] quizzes[].questionCount in course.json matches the actual count of questions in the .md file.
+
+[ ] "version" numbers in course.json and catalog.json were incremented so the Study Hub app detects the update.
