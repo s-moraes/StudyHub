@@ -5,7 +5,7 @@
   "assets": [
     "assets/java-jvm-diagram.webp"
   ],
-  "learningPaths": [
+  "path": [
     {
       "id": "path-java-1",
       "title": "Java Syntax & Core Language",

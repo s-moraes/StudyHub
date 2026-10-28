@@ -6,7 +6,7 @@
     "assets/url-shortener.webp",
     "assets/scalability-diagram.webp"
   ],
-  "learningPaths": [
+  "path": [
     {
       "id": "path-sd-1",
       "title": "Foundations of Distributed Systems",

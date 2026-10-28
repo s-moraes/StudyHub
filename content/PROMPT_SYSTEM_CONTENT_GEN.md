@@ -9,13 +9,13 @@ The app consumes this repository directly via raw GitHub URLs (`raw.githubuserco
 
 ## 2. Repository Directory Architecture
 
-All study material resides inside the `content/` directory. There is **1 global catalog** (`catalog.json`) and **1 isolated subfolder per course (`<course-id>`)**:
+All study material resides inside the `content/` directory. There is **1 global catalog** (`catalog.json`) and **1 isolated subfolder per subject (`<subject-id>`)**:
 
 ```text
 content/
 ├── catalog.json                             <-- Global index of all courses in the repository
-└── <course-id>/                             <-- Course folder (kebab-case, e.g., "system-design")
-    ├── course.json                          <-- Course manifest, learning paths, extras & quizzes index
+└── <subject-id>/                             <-- Subject folder (kebab-case, e.g., "system-design")
+    ├── subject.json                          <-- Subject manifest, learning paths, extras & quizzes index
     ├── assets/                              <-- Local images & diagrams (.webp, .png, .svg)
     │   └── example-diagram.webp
     ├── learn/                               <-- Core theoretical lessons (.md)
@@ -29,7 +29,7 @@ content/
 ```
 
 ### Naming Conventions
-- **`<course-id>` & All IDs:** Strictly `kebab-case` (`a-z`, `0-9`, `-`). No spaces, underscores, or uppercase letters.
+- **`<subject-id>` & All IDs:** Strictly `kebab-case` (`a-z`, `0-9`, `-`). No spaces, underscores, or uppercase letters.
 - **Filenames:** Strictly `kebab-case.md` (e.g., `01-nodes-and-latency.md`).
 - **Image Assets:** Prefer `.webp` or `.svg` for low file size and clean rendering across Light and Dark themes.
 
@@ -43,23 +43,23 @@ Lists every course available for download in the app's Settings screen.
 ```json
 {
   "version": 1,
-  "courses": [
+  "subjects": [
     {
       "id": "system-design",
       "title": "System Design & Architecture",
       "description": "Scalability, distributed systems, and real-world architectures.",
       "version": 1,
-      "courseJsonPath": "content/system-design/course.json"
+      "courseJsonPath": "content/system-design/subject.json"
     }
   ]
 }
 ```
-- **Rule:** Whenever you add a new course or increment a course's `"version"` inside its `course.json`, you **must** also update the corresponding entry in `content/catalog.json` and increment the root `"version"`.
+- **Rule:** Whenever you add a new subject or increment a course's `"version"` inside its `subject.json`, you **must** also update the corresponding entry in `content/catalog.json` and increment the root `"version"`.
 
 ---
 
-### 3.2. Course Manifest (`content/<course-id>/course.json`)
-Acts as the single source of truth for a course's navigation, cards, tags, gating rules, and file paths.
+### 3.2. Subject Manifest (`content/<subject-id>/subject.json`)
+Acts as the single source of truth for a subject's navigation, cards, tags, gating rules, and file paths.
 
 ```json
 {
@@ -69,7 +69,7 @@ Acts as the single source of truth for a course's navigation, cards, tags, gatin
   "assets": [
     "assets/example-diagram.webp"
   ],
-  "learningPaths": [
+  "path": [
     {
       "id": "distributed-systems",
       "title": "Foundations of Distributed Systems",
@@ -113,8 +113,8 @@ Acts as the single source of truth for a course's navigation, cards, tags, gatin
 }
 ```
 
-#### Strict Field Rules for `course.json`:
-1. **NO `readingTimeMinutes`:** Never include a `readingTimeMinutes` field anywhere in `course.json`.
+#### Strict Field Rules for `subject.json`:
+1. **NO `readingTimeMinutes`:** Never include a `readingTimeMinutes` field anywhere in `subject.json`.
 2. **`assets` Array:** Must list the relative path (`"assets/<filename>"`) of every local image referenced inside any `.md` file of that course so the app's offline downloader fetches them.
 3. **`extras[].type` Enum:** Must be one of:
    - `"USE_CASE"` (Real-world architecture or practical implementation)
@@ -123,7 +123,7 @@ Acts as the single source of truth for a course's navigation, cards, tags, gatin
    - `"EXTERNAL_LINK"` (Direct reference to external blogs, docs, or RFCs)
 4. **`extras[].tier` & Gating:**
    - `"FREE"`: Unlocked by default (`"unlockAfterPathId": null`).
-   - `"CORE"`: Locked behind a padlock icon in the UI until the user completes all topics in `"unlockAfterPathId"` (must match a valid `learningPaths[].id`).
+   - `"CORE"`: Locked behind a padlock icon in the UI until the user completes all topics in `"unlockAfterPathId"` (must match a valid `path[].id`).
 5. **`extras[].externalUrl` & `file`:**
    - For `"USE_CASE"`, `"CURIOSITY"`, and `"HISTORY"`: `"file"` points to `"extra/<name>.md"` and `"externalUrl"` is `null` (or an optional reference link).
    - For `"EXTERNAL_LINK"`: `"externalUrl"` must be a valid `https://` URL and `"file"` can be `null`.
@@ -134,7 +134,7 @@ Acts as the single source of truth for a course's navigation, cards, tags, gatin
 ## 4. Markdown Content Specifications
 
 ### 4.1. `learn/*.md` and `extra/*.md` Format
-Files inside `learn/` and `extra/` are **pure Markdown** (do **not** add YAML/JSON frontmatter at the top, because all metadata already lives in `course.json`).
+Files inside `learn/` and `extra/` are **pure Markdown** (do **not** add YAML/JSON frontmatter at the top, because all metadata already lives in `subject.json`).
 
 - **Structure Guidelines:**
   - Start with a single `# H1 Title` matching the topic or extra title.
@@ -143,8 +143,8 @@ Files inside `learn/` and `extra/` are **pure Markdown** (do **not** add YAML/JS
   - Use Markdown tables (`| Col | Col |`) for comparisons and trade-offs.
   - Always specify the language identifier on fenced code blocks (e.g., ```` ```java ````, ```` ```kotlin ````, ```` ```sql ````, ```` ```text ````). Keep code lines concise (ideally $\le 70$ characters per line) so they read cleanly on mobile screens.
 - **Referencing Local Images:**
-  - Place the image file in `content/<course-id>/assets/<image-name.webp>`.
-  - Add `"assets/<image-name.webp>"` to the `"assets"` list in `course.json`.
+  - Place the image file in `content/<subject-id>/assets/<image-name.webp>`.
+  - Add `"assets/<image-name.webp>"` to the `"assets"` list in `subject.json`.
   - Reference it in the `.md` file using the exact pattern:
     ```markdown
     ![Descriptive Alt Text](../assets/image-name.webp)
@@ -208,64 +208,64 @@ Second question prompt goes here...
 
 5. Step-by-Step Workflows for Adding New Content
 Workflow A: Adding a New Topic to an Existing Learning Path
-Create content/<course-id>/learn/<NN-topic-slug>.md following Section 4.1.
+Create content/<subject-id>/learn/<NN-topic-slug>.md following Section 4.1.
 
-Open content/<course-id>/course.json:
+Open content/<subject-id>/subject.json:
 
-Locate the target object in learningPaths[].
+Locate the target object in path[].
 
 Append the new topic entry to topics[] with a unique id, title, file, and optional relatedQuizId / relatedExtraIds.
 
-Increment "version" in course.json.
+Increment "version" in subject.json.
 
 Open content/catalog.json:
 
-Increment "version" for <course-id> to match course.json, and increment the root "version".
+Increment "version" for <subject-id> to match subject.json, and increment the root "version".
 
 Workflow B: Adding a New Extra Item (USE_CASE, CURIOSITY, HISTORY, EXTERNAL_LINK)
-If the item has an article body, create content/<course-id>/extra/<slug>.md following Section 4.1.
+If the item has an article body, create content/<subject-id>/extra/<slug>.md following Section 4.1.
 
-Open content/<course-id>/course.json:
+Open content/<subject-id>/subject.json:
 
 Append a new entry to extras[] with a unique id, title, 1–2 sentence summary, valid type, up to 3 short tags, tier ("FREE" or "CORE"), unlockAfterPathId, externalUrl, and file.
 
-optionally link its id inside related learningPaths[].topics[].relatedExtraIds.
+optionally link its id inside related path[].topics[].relatedExtraIds.
 
-Increment "version" in course.json and content/catalog.json.
+Increment "version" in subject.json and content/catalog.json.
 
 Workflow C: Adding or Expanding a Quiz
-Create or edit content/<course-id>/quiz/<quiz-slug>.md strictly following Section 4.2.
+Create or edit content/<subject-id>/quiz/<quiz-slug>.md strictly following Section 4.2.
 
 Count the total number of ## Q<N> blocks in the file.
 
-Open content/<course-id>/course.json:
+Open content/<subject-id>/subject.json:
 
 Update or add the quiz entry in quizzes[], ensuring "questionCount" equals the exact number of questions in the .md file.
 
-Increment "version" in course.json and content/catalog.json.
+Increment "version" in subject.json and content/catalog.json.
 
-Workflow D: Creating a Brand-New Course (content/<new-course-id>/)
+Workflow D: Creating a Brand-New Subject (content/<new-course-id>/)
 Create directory tree: content/<new-course-id>/{assets,learn,extra,quiz}.
 
-Generate course.json with "version": 1 and at least 1 Learning Path, 1 Extra, and 1 Quiz.
+Generate subject.json with "version": 1 and at least 1 Learning Path, 1 Extra, and 1 Quiz.
 
 Generate all referenced .md files in learn/, extra/, and quiz/.
 
-Register the new course inside content/catalog.json and increment the catalog "version".
+Register the new subject inside content/catalog.json and increment the catalog "version".
 
 6. Pre-Commit Compliance Checklist (Self-Verification)
 Before finalizing any file generation or modification, verify:
 
-[ ] All JSON files (catalog.json, course.json) are 100% valid JSON with no trailing commas or comments.
+[ ] All JSON files (catalog.json, subject.json) are 100% valid JSON with no trailing commas or comments.
 
-[ ] Every "file" path in course.json exists on disk at content/<course-id>/<file>.
+[ ] Every "file" path in subject.json exists on disk at content/<subject-id>/<file>.
 
-[ ] Every local image ../assets/<img.webp> used in Markdown exists in assets/ and is listed in course.json -> assets[].
+[ ] Every local image ../assets/<img.webp> used in Markdown exists in assets/ and is listed in subject.json -> assets[].
 
 [ ] No readingTimeMinutes property exists anywhere.
 
 [ ] Every quiz/*.md question has exactly 4 options (### Option A..D), exactly one [CORRECT] marker, an ### Explanation section, and \n===\n between questions.
 
-[ ] quizzes[].questionCount in course.json matches the actual count of questions in the .md file.
+[ ] quizzes[].questionCount in subject.json matches the actual count of questions in the .md file.
 
-[ ] "version" numbers in course.json and catalog.json were incremented so the Study Hub app detects the update.
+[ ] "version" numbers in subject.json and catalog.json were incremented so the Study Hub app detects the update.

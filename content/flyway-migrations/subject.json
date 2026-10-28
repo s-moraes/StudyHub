@@ -3,7 +3,7 @@
   "title": "Database Migrations with Flyway",
   "version": 1,
   "assets": [],
-  "learningPaths": [
+  "path": [
     {
       "id": "flyway-fundamentals",
       "title": "Core Concepts & Architecture",
